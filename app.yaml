@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: 'https://github.com/sidhuni/your-chart-argo.git'
     targetRevision: main        # or master or branch name
-    path: app.yaml    # folder where Chart.yaml exists
+    path: .    # folder where Chart.yaml exists
     helm:
       releaseName: chart-release
 
