@@ -11,15 +11,15 @@ spec:
   {{- if .Values.ingress.className }}
   ingressClassName: {{ .Values.ingress.className }}
   {{- end }}
-  rules:
-    {{- range .Values.ingress.hosts }}
+  rules:      # This is where hosts and paths are configured.
+    {{- range .Values.ingress.hosts }}      # This loops through every host defined in values.yaml
     - host: {{ .host }}
       http:
         paths:
           {{- range .paths }}
           - path: {{ .path }}
             pathType: {{ .pathType }}
-            backend:
+            backend:        # Always routes to your chart's service
               service:
                 name: {{ include "chart.fullname" $ }}
                 port:

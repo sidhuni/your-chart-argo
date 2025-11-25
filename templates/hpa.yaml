@@ -1,4 +1,4 @@
-{{- if .Values.hpa.enabled }}
+{{- if .Values.hpa.enabled }}     # Monitor CPU usage of your deployment
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -18,3 +18,7 @@ spec:
     kind: Deployment
     name: {{ include "chart.fullname" . }}
 {{- end }}
+
+
+
+

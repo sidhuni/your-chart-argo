@@ -5,9 +5,20 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.port }}  # This is the port exposed externally (Service port).
+      targetPort: http    # forwards traffic to container "http" port
       protocol: TCP
       name: http
-  selector:
+  selector:       #“Send traffic to all Pods that have this label"
     app: {{ include "chart.name" . }}
+
+
+
+
+# ClusterIP → internal cluster access only
+
+# NodePort → accessible on node ports
+
+# LoadBalancer → creates cloud load balancer
+
+# Most services (HTTP, gRPC, etc.) use TCP.

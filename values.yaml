@@ -12,18 +12,18 @@ service:
 ingress:
   enabled: true
   className: nginx
-  annotations: {}
+  annotations: {}   #  These are often used to configure specific controller behaviors, like setting timeouts or enabling certain features (e.g., nginx.ingress.kubernetes.io/rewrite-target: /).
   hosts:
     - host: your-app.local
       paths:
-        - path: /
-          pathType: Prefix
+        - path: /   # The URL path that traffic should match. In this case, it matches the root path of the host.
+          pathType: Prefix      # Specifies how the path should be matched: Prefix means that any request whose URL starts with / (i.e., all requests) will match this rule. Other types include Exact and ImplementationSpecific
   tls: []
 
 serviceAccount:
   create: true
   name: ""
-  annotations: {}
+  annotations: {}     # Annotations do not change functionality directly.They are used to give extra instructions to Kubernetes or external controllers (IAM roles, security tools, ArgoCD, etc).
 
 hpa:
   enabled: true
@@ -33,27 +33,45 @@ hpa:
 
 config:
   LOG_LEVEL: info
-  FEATURE_FLAG: "true"
+  FEATURE_FLAG: "true"      #A feature flag is used to remotely enable or disable specific features in an application without deploying new code. Setting it to "true" means the associated feature is enabled
 
-probes:
-  readiness:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    httpGet:
-      path: /
-      port: http
-  liveness:
-    enabled: true
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    httpGet:
-      path: /
-      port: http
-  startup:
-    enabled: true
-    initialDelaySeconds: 3
-    periodSeconds: 10
-    httpGet:
-      path: /
-      port: http
+
+readiness:
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  httpGet:
+    path: /
+    port: http
+
+liveness:                                # http://<Pod_IP>:<http_port>/
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  httpGet:
+    path: /
+    port: http
+    
+startup:
+  initialDelaySeconds: 3
+  periodSeconds: 10
+  httpGet:                     
+    path: /
+    port: http
+
+
+
+
+#readinessProbe:
+#nitialDelaySeconds: 10
+#periodSeconds: 20
+  #tcpSocket:
+    # Checks if a connection can be opened to port 6379 (standard Redis port)
+    #port: 6379
+
+#livenessProbe:
+ # periodSeconds: 5
+ # failureThreshold: 5
+ # exec:
+    # Runs a command to check if the file /tmp/app_healthy exists
+  #  command:
+   #   - cat
+   #   - /tmp/app_healthy
